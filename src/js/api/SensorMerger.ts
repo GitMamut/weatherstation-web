@@ -7,6 +7,7 @@ import { MeasuredValuesNames, MeasuredValue, Sensor, CommonSensorReading, Common
 import { measuredValues, SENSOR_MERGER_URL } from "../config";
 import { setIsBeingFetched, setMeasuredValue, setSensorMergerIsBeingFetched } from "../redux/actions";
 import { isBeingFetchedPayload, measuredValuePayload } from "./CommonSensor";
+import { fetchLatestValuesFromDb } from "./Firebase";
 
 export function fetchMultipleMeasuredValues(measuredValueNames: MeasuredValuesNames[]):
     ThunkAction<void, AppState, undefined, Actions> {
@@ -30,7 +31,12 @@ export function fetchMultipleMeasuredValues(measuredValueNames: MeasuredValuesNa
                     dispatch(setMeasuredValue(measuredValuePayload(measuredValueName, value)));
                 })
             })
-            .catch(error => console.error(error))
+            .catch(error => { 
+                console.warn("Direct sensor request failed: " + error);
+                console.warn("Trying to fetch latest DB values");
+                fetchLatestValuesFromDb(measuredValueNames, dispatch);
+                // console.error(error);
+            })
             .finally(() => {
                 measuredValueNames.forEach(measuredValueName =>
                     dispatch(setIsBeingFetched(isBeingFetchedPayload(measuredValueName, false))));

@@ -35,10 +35,12 @@ export type CommonSensorValue = {
 
 export type SensorMergerType = {
     date: number;
-    sensorReadings: {
-        [K in MeasuredValuesNames]: number;
-    },
+    sensorReadings: SensorMergerReadings,
     errors: SensorMergerErrorType[],
+};
+
+export type SensorMergerReadings = {
+    [K in MeasuredValuesNames]: number;
 };
 
 export type SensorMergerErrorType = {
