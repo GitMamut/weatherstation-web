@@ -8,9 +8,9 @@ type Props = {
 };
 
 const ValueDisplay = (props: Props) => (
-  <div style={{ display: "flex", flexDirection: "column" }}>
-    <p>{props.reading}</p>
-    <button onClick={props.onClick} disabled={props.isFetched}>{props.label}</button>
+  <div style={{ display: "flex", flexDirection: "column", cursor: "pointer" }} onClick={props.onClick}>
+    <p>{props.isFetched ? "..." : props.reading}</p>
+    <p>{props.label}</p>
   </div>
 );
 
