@@ -22,9 +22,14 @@ export function setIsBeingFetched(payload: IsBeingFetchedPayload): SetIsBeingFet
 
 export function fetchMeasuredValue(measuredValueName: MeasuredValuesNames):
     ThunkAction<void, AppState, undefined, Actions> {
-    return dispatch => {
+    return (dispatch, getState: () => AppState) => {
         const measuredValue: MeasuredValue = measuredValues[measuredValueName];
         const sensor: Sensor = measuredValue.sensor;
+
+        if(getState().measuredValues[measuredValueName].isFetched) {
+            console.warn("Value is already being fetched:" + measuredValueName);
+            return;
+        }
 
         dispatch(setIsBeingFetched(isBeingFetchedPayload(measuredValueName, true)));
 
@@ -47,7 +52,7 @@ export function fetchMeasuredValue(measuredValueName: MeasuredValuesNames):
 function getCommonSensorValue(json: CommonSensorReading, measuredValueId: string) {
     const possiblyCommonSensorValue = json.values.find((v: CommonSensorValue) => v.name === measuredValueId);
     if (!possiblyCommonSensorValue) {
-        throw "Could not read CommonSensorValue: " + JSON.stringify(possiblyCommonSensorValue);
+        throw "Could not read CommonSensorValue: " + JSON.stringify(json);
     }
     const value: number = parseFloat(possiblyCommonSensorValue.value);
     return value;
