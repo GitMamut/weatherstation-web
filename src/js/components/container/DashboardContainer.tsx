@@ -3,10 +3,10 @@ import ValueDisplay from "../presentational/ValueDisplay";
 import { connect } from "react-redux";
 import { Actions } from "../../constants/action-types";
 import { AppState, MeasuredValueIndicator } from "../../redux/rootReducer";
-import { fetchSingleMeasuredValue, fetchMultipleMeasuredValues } from "../../redux/actions";
 import { ThunkAction } from "redux-thunk";
 import { MeasuredValuesNames } from "../../types";
 import Dashboard from "../presentational/Dashboard";
+import { fetchSingleMeasuredValue, fetchMultipleMeasuredValues } from "../../redux/api";
 
 type DispatchProps = {
   fetchMeasuredValue: (measuredValueName: MeasuredValuesNames) => void,

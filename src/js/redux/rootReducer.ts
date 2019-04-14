@@ -1,4 +1,4 @@
-import { Actions, SET_MEASURED_VALUE, SET_IS_BEING_FETCHED } from "../constants/action-types";
+import { Actions, SET_MEASURED_VALUE, SET_IS_BEING_FETCHED, SET_SENSOR_MERGER_IS_BEING_FETCHED } from "../constants/action-types";
 import { MeasuredValuesNames } from "../types";
 
 export type MeasuredValueIndicator = {
@@ -10,6 +10,7 @@ export type AppState = {
     measuredValues: {
         [K in MeasuredValuesNames]: MeasuredValueIndicator;
     };
+    sensorMergerIsFetched: boolean;
 };
 
 const initialState = {
@@ -22,7 +23,8 @@ const initialState = {
             value: 0,
             isFetched: false,
         },
-    }
+    },
+    sensorMergerIsFetched: false,
 };
 
 function rootReducer(state: AppState = initialState, action: Actions) {
@@ -48,6 +50,11 @@ function rootReducer(state: AppState = initialState, action: Actions) {
                         isFetched: action.payload.isBeingFetched,
                     },
                 }
+            };
+        case SET_SENSOR_MERGER_IS_BEING_FETCHED:
+            return {
+                ...state,
+                sensorMergerIsFetched: action.payload,
             };
         default:
             return state;

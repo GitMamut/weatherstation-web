@@ -2,6 +2,7 @@ import { MeasuredValuesNames } from "../types";
 
 export const SET_MEASURED_VALUE = "SET_MEASURED_VALUE";
 export const SET_IS_BEING_FETCHED = "SET_IS_BEING_FETCHED";
+export const SET_SENSOR_MERGER_IS_BEING_FETCHED = "SET_SENSOR_MERGER_IS_BEING_FETCHED";
 
 export type MeasuredValuePayload = {
     value: number;
@@ -23,5 +24,12 @@ export type SetIsBeingFetched = {
     payload: IsBeingFetchedPayload;
 }
 
+export type SetSensorMergerIsBeingFetched = {
+    type: typeof SET_SENSOR_MERGER_IS_BEING_FETCHED;
+    payload: boolean;
+}
 
-export type Actions = SetMeasuredValue | SetIsBeingFetched;
+export type Actions =
+    SetMeasuredValue |
+    SetIsBeingFetched |
+    SetSensorMergerIsBeingFetched;
