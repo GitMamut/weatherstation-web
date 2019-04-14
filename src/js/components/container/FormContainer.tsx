@@ -1,82 +1,56 @@
 import React, { Dispatch } from "react";
-import Input from "../presentational/Input";
+import ValueDisplay from "../presentational/ValueDisplay";
 import { connect } from "react-redux";
 import uuidv1 from "uuid";
-import { Paragraph, addParagraphAction, Actions } from "../../constants/action-types";
-import { AppState } from "../../redux/rootReducer";
-import { addParagraph, addParagraphTimedout } from "../../redux/actions";
+import { Actions, MeasuredValuePayload } from "../../constants/action-types";
+import { AppState, MeasuredValueIndicator } from "../../redux/rootReducer";
+import { setMeasuredValue, fetchMeasuredValue } from "../../redux/actions";
 import { ThunkDispatch, ThunkAction } from "redux-thunk";
+import { MeasuredValuesNames } from "../../types";
 
 type DispatchProps = {
-    addParagraph: (paragraph: Paragraph) => void,
-    addParagraphAsync: (paragraph: Paragraph) => void
+    setMeasuredValue: (measuredValue: MeasuredValuePayload) => void,
+    fetchMeasuredValue: (measuredValueName: MeasuredValuesNames) => void
 };
-type OwnProps = { paragraphs: Paragraph[] };
-type Props = OwnProps & DispatchProps;
-type State = { paragraph: string };
+type StateProps = {
+    outdoor_temperature: MeasuredValueIndicator,
+    indoor1_temperature: MeasuredValueIndicator,
+};
+type Props = StateProps & DispatchProps;
+type State = {};
 
 class FormContainerConnected extends React.Component<Props, State> {
-    public constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            paragraph: ""
-        };
-    }
-
-    private handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-        this.setState({ paragraph: event.currentTarget.value });
-    }
-
-    private handleSubmit = (event: React.FormEvent): void => {
-        event.preventDefault();
-        const { paragraph } = this.state;
-        this.props.addParagraph({ paragraph, id: uuidv1() });
-        this.setState({ paragraph: "" });
-    }
-
-    private handleSubmitAsync = (event: React.FormEvent): void => {
-        event.preventDefault();
-        const { paragraph } = this.state;
-        this.props.addParagraphAsync({ paragraph, id: uuidv1() });
-        this.setState({ paragraph: "" });
-    }
-
     public render() {
-        const { paragraph } = this.state;
         return (
-            <form id="paragraph-form" onSubmit={this.handleSubmit}>
-                <h1 style={{ margin: 0 }}>react redux thunk typescript babel webpack</h1>
-                <h3 style={{ marginTop: 0 }}>
-                    sample boilerplate initial code project
-                    - <i><a href="http://tech.mintfrost.com">mintfrost.com</a></i>
-                </h3>
-                <div style={{ display: "flex" }}>
-                    <Input
-                        text="Paragraph"
-                        label="paragraph"
-                        type="text"
-                        id="paragraph"
-                        value={paragraph}
-                        handleChange={this.handleChange}
-                    />
-                    <button type="submit">Add</button>
-                    <button onClick={this.handleSubmitAsync}>Add async</button>
-                </div>
-                {this.props.paragraphs.map(art => <p key={art.id}>{art.paragraph}</p>)}
-            </form>
+            <div>
+                <ValueDisplay
+                    isFetched={this.props.outdoor_temperature.isFetched}
+                    label="temperature outdoor"
+                    reading={this.props.outdoor_temperature.value}
+                    onClick={() => this.props.fetchMeasuredValue("outdoor_temperature")}
+                />
+                <ValueDisplay
+                    isFetched={this.props.indoor1_temperature.isFetched}
+                    label="temperature indoor"
+                    reading={this.props.indoor1_temperature.value}
+                    onClick={() => this.props.fetchMeasuredValue("indoor1_temperature")}
+                />
+            </div>
         );
     }
 }
 
-const mapStateToProps = (state: AppState) => {
-    return { paragraphs: state.paragraphs };
+const mapStateToProps = (state: AppState): StateProps => {
+    return {
+        outdoor_temperature: state.measuredValues.outdoor_temperature,
+        indoor1_temperature: state.measuredValues.indoor1_temperature,
+    };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions | ThunkAction<void, AppState, undefined, Actions>>) => {
+const mapDispatchToProps = (dispatch: Dispatch<Actions | ThunkAction<void, AppState, undefined, Actions>>): DispatchProps => {
     return {
-        addParagraph: (paragraph: Paragraph) => dispatch(addParagraph(paragraph)),
-        addParagraphAsync: (paragraph: Paragraph) => dispatch(addParagraphTimedout(paragraph))
+        setMeasuredValue: (measuredValue: MeasuredValuePayload) => dispatch(setMeasuredValue(measuredValue)),
+        fetchMeasuredValue: (measuredValueName: MeasuredValuesNames) => dispatch(fetchMeasuredValue(measuredValueName))
     };
 }
 

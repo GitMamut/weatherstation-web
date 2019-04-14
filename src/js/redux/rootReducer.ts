@@ -1,24 +1,53 @@
-import {
-    ADD_PARAGRAPH, addParagraphAction, Paragraph
-} from "../constants/action-types";
+import { Actions, SET_MEASURED_VALUE, SET_IS_BEING_FETCHED } from "../constants/action-types";
+import { MeasuredValuesNames } from "../types";
 
-export type AppState = {
-    paragraphs: Paragraph[];
+export type MeasuredValueIndicator = {
+    value: number;
+    isFetched: boolean;
 }
 
-const initialState = {
-    paragraphs: []
+export type AppState = {
+    measuredValues: {
+        [K in MeasuredValuesNames]: MeasuredValueIndicator;
+    };
 };
 
-function rootReducer(state: AppState = initialState, action: addParagraphAction) {
+const initialState = {
+    measuredValues: {
+        outdoor_temperature: {
+            value: 0,
+            isFetched: false,
+        },
+        indoor1_temperature: {
+            value: 0,
+            isFetched: false,
+        },
+    }
+};
+
+function rootReducer(state: AppState = initialState, action: Actions) {
     switch (action.type) {
-        case ADD_PARAGRAPH:
+        case SET_MEASURED_VALUE:
             return {
                 ...state,
-                paragraphs: [
-                    ...state.paragraphs,
-                    action.payload
-                ]
+                measuredValues: {
+                    ...state.measuredValues,
+                    [action.payload.measuredValueName]: {
+                        ...state.measuredValues[action.payload.measuredValueName],
+                        value: action.payload.value,
+                    },
+                }
+            };
+        case SET_IS_BEING_FETCHED:
+            return {
+                ...state,
+                measuredValues: {
+                    ...state.measuredValues,
+                    [action.payload.measuredValueName]: {
+                        ...state.measuredValues[action.payload.measuredValueName],
+                        isFetched: action.payload.isBeingFetched,
+                    },
+                }
             };
         default:
             return state;
