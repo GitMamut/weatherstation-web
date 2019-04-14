@@ -1,5 +1,7 @@
 import { MeasuredValues, Sensors } from "./types";
 
+export const SENSOR_MERGER_URL = "http://raspberrypi:7001/";
+
 export const sensors: Sensors = {
     outdoor: {
         name: "outdoor",

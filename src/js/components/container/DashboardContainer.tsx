@@ -3,13 +3,14 @@ import ValueDisplay from "../presentational/ValueDisplay";
 import { connect } from "react-redux";
 import { Actions } from "../../constants/action-types";
 import { AppState, MeasuredValueIndicator } from "../../redux/rootReducer";
-import { fetchMeasuredValue } from "../../redux/actions";
+import { fetchSingleMeasuredValue, fetchMultipleMeasuredValues } from "../../redux/actions";
 import { ThunkAction } from "redux-thunk";
 import { MeasuredValuesNames } from "../../types";
 import Dashboard from "../presentational/Dashboard";
 
 type DispatchProps = {
-  fetchMeasuredValue: (measuredValueName: MeasuredValuesNames) => void
+  fetchMeasuredValue: (measuredValueName: MeasuredValuesNames) => void,
+  fetchMultipleMeasuredValues: (measuredValueNames: MeasuredValuesNames[]) => void
 };
 
 type StateProps = {
@@ -21,7 +22,7 @@ type Props = StateProps & DispatchProps;
 
 type State = {};
 
-class FormContainerConnected extends React.Component<Props, State> {
+class DashboardContainerConnected extends React.Component<Props, State> {
   public render() {
     return (
       <Dashboard>
@@ -40,6 +41,11 @@ class FormContainerConnected extends React.Component<Props, State> {
       </Dashboard>
     );
   }
+
+  public componentDidMount() {
+    this.props.fetchMultipleMeasuredValues(["outdoor_temperature", "indoor1_temperature"]);
+  }
+  
 }
 
 const mapStateToProps = (state: AppState): StateProps => {
@@ -51,9 +57,10 @@ const mapStateToProps = (state: AppState): StateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions | ThunkAction<void, AppState, undefined, Actions>>): DispatchProps => {
   return {
-    fetchMeasuredValue: (measuredValueName: MeasuredValuesNames) => dispatch(fetchMeasuredValue(measuredValueName))
+    fetchMeasuredValue: (measuredValueName: MeasuredValuesNames) => dispatch(fetchSingleMeasuredValue(measuredValueName)),
+    fetchMultipleMeasuredValues: (measuredValueNames: MeasuredValuesNames[]) => dispatch(fetchMultipleMeasuredValues(measuredValueNames))
   };
 }
 
-const FormContainer = connect(mapStateToProps, mapDispatchToProps)(FormContainerConnected);
-export default FormContainer;
+const DashboardContainer = connect(mapStateToProps, mapDispatchToProps)(DashboardContainerConnected);
+export default DashboardContainer;
