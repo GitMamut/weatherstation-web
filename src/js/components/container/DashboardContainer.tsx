@@ -6,7 +6,8 @@ import { AppState, MeasuredValueIndicator } from "../../redux/rootReducer";
 import { ThunkAction } from "redux-thunk";
 import { MeasuredValuesNames } from "../../types";
 import Dashboard from "../presentational/Dashboard";
-import { fetchSingleMeasuredValue, fetchMultipleMeasuredValues } from "../../redux/api";
+import { fetchSingleMeasuredValue } from "../../api/CommonSensor";
+import { fetchMultipleMeasuredValues } from "../../api/SensorMerger";
 
 type DispatchProps = {
   fetchMeasuredValue: (measuredValueName: MeasuredValuesNames) => void,
