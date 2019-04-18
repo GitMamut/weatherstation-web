@@ -4,7 +4,7 @@ import {
 import { ThunkAction } from "redux-thunk";
 import { AppState } from "../redux/rootReducer";
 import { MeasuredValuesNames, MeasuredValue, Sensor, CommonSensorReading, CommonSensorValue } from "../types";
-import { measuredValues } from "../config";
+import { measuredValues } from "../../config/config";
 import { setIsBeingFetched, setMeasuredValue } from "../redux/actions";
 
 export function fetchSingleMeasuredValue(measuredValueName: MeasuredValuesNames):

@@ -1,4 +1,5 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx']
@@ -7,7 +8,7 @@ module.exports = {
     rules: [
       {
         test: [/\.jsx?$/, /\.tsx?$/],
-        exclude: /node_modules/,
+        exclude: [/node_modules/],
         use: {
           loader: "babel-loader"
         }
@@ -26,6 +27,9 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: "./src/index.html",
       filename: "./index.html"
-    })
-  ]
+    }),
+    new CopyWebpackPlugin([
+      { from: 'src/config', to: 'config' }
+    ]),
+  ],
 };
