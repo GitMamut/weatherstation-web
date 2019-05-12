@@ -8,6 +8,7 @@ import { MeasuredValuesNames } from "../../types";
 import Dashboard from "../presentational/Dashboard";
 import { fetchSingleMeasuredValue } from "../../api/CommonSensor";
 import { fetchMultipleMeasuredValues } from "../../api/SensorMerger";
+import { temperature } from "../../constants/palettes";
 
 type DispatchProps = {
   fetchMeasuredValue: (measuredValueName: MeasuredValuesNames) => void,
@@ -16,7 +17,7 @@ type DispatchProps = {
 
 type StateProps = {
   outdoor_temperature: MeasuredValueIndicator,
-  indoor1_temperature: MeasuredValueIndicator,
+  indoor2_temperature: MeasuredValueIndicator,
 };
 
 type Props = StateProps & DispatchProps;
@@ -29,22 +30,24 @@ class DashboardContainerConnected extends React.Component<Props, State> {
       <Dashboard>
         <ValueDisplay
           isFetched={this.props.outdoor_temperature.isFetched}
-          label="temperature outdoor"
+          label="outdoor"
           reading={this.props.outdoor_temperature.value}
+          paletteColor={temperature}
           onClick={() => this.props.fetchMeasuredValue("outdoor_temperature")}
         />
         <ValueDisplay
-          isFetched={this.props.indoor1_temperature.isFetched}
-          label="temperature indoor"
-          reading={this.props.indoor1_temperature.value}
-          onClick={() => this.props.fetchMeasuredValue("indoor1_temperature")}
+          isFetched={this.props.indoor2_temperature.isFetched}
+          label="indoor"
+          reading={this.props.indoor2_temperature.value}
+          paletteColor={temperature}
+          onClick={() => this.props.fetchMeasuredValue("indoor2_temperature")}
         />
       </Dashboard>
     );
   }
 
   public componentDidMount() {
-    this.props.fetchMultipleMeasuredValues(["outdoor_temperature", "indoor1_temperature"]);
+    this.props.fetchMultipleMeasuredValues(["outdoor_temperature", "indoor2_temperature"]);
   }
   
 }
@@ -52,7 +55,7 @@ class DashboardContainerConnected extends React.Component<Props, State> {
 const mapStateToProps = (state: AppState): StateProps => {
   return {
     outdoor_temperature: state.measuredValues.outdoor_temperature,
-    indoor1_temperature: state.measuredValues.indoor1_temperature,
+    indoor2_temperature: state.measuredValues.indoor2_temperature,
   };
 };
 

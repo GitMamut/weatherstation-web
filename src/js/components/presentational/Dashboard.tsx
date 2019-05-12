@@ -1,4 +1,5 @@
 import React from "react";
+import "./styles.css"
 
 type Props = {
 
@@ -7,7 +8,7 @@ type Props = {
 class Dashboard extends React.PureComponent<Props> {
   render() {
     return (
-      <div style={{ display: "flex", flexDirection: "row" }}>
+      <div className="dashboard__container">
         {this.props.children}
       </div>)
   };

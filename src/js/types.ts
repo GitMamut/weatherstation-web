@@ -1,5 +1,5 @@
-export type MeasuredValuesNames = "outdoor_temperature" |  "indoor1_temperature";
-export type SensorsNames = "outdoor" | "indoor1";
+export type MeasuredValuesNames = "outdoor_temperature" |  "indoor2_temperature";
+export type SensorsNames = "outdoor" | "indoor2";
 
 export type Sensors = {
     [K in SensorsNames]: Sensor;

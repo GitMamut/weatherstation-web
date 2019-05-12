@@ -1,6 +1,6 @@
 import { MeasuredValues, Sensors } from "../js/types";
 
-export const SENSOR_MERGER_URL = "http://raspberrypi1:7001/";
+export const SENSOR_MERGER_URL = "http://raspberrypi:7001/";
 export const DB_SERVICE = "https://mintfrost-db.herokuapp.com/";
 
 export const sensors: Sensors = {
@@ -9,9 +9,9 @@ export const sensors: Sensors = {
         url: "http://raspberrypi:8080/commonOutdoor",
         availableValues: ["temperature"],
     },
-    indoor1: {
-        name: "indoor1",
-        url: "http://raspberrypi:8080/commonIndoor1",
+    indoor2: {
+        name: "indoor2",
+        url: "http://raspberrypi:8080/commonIndoor2",
         availableValues: ["temperature"],
     },
 };
@@ -23,10 +23,10 @@ export const measuredValues: MeasuredValues = {
         unit: "°C",
         name: "Outdoor temperature",
     },
-    indoor1_temperature: {
-        sensor: sensors.indoor1,
+    indoor2_temperature: {
+        sensor: sensors.indoor2,
         id: "temperature",
         unit: "°C",
-        name: "Indoor1 temperature",
+        name: "Indoor2 temperature",
     }
 };

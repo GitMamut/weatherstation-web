@@ -19,7 +19,7 @@ const initialState = {
             value: 0,
             isFetched: false,
         },
-        indoor1_temperature: {
+        indoor2_temperature: {
             value: 0,
             isFetched: false,
         },
