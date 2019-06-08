@@ -32,8 +32,8 @@ module.exports = {
       template: "./src/index.html",
       filename: "./index.html"
     }),
-    new CopyWebpackPlugin([
-      { from: 'src/config', to: 'config' }
-    ]),
+    // new CopyWebpackPlugin([
+    //   { from: 'src/config', to: 'config' }
+    // ]),
   ],
 };

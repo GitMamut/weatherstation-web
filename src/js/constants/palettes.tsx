@@ -11,4 +11,22 @@ export const temperature = (isFetched: boolean, reading: number): string => {
       return colormap((reading * -1)/20);
     }
   }
+
+export const humidity = (isFetched: boolean, reading: number): string => {
+    if (isFetched) {
+      return "lightgray";
+    } else {
+      let colormap = interpolate(["white","lightblue","blue"]);
+      return colormap(reading/100);
+    }
+  }
+
+export const pressure = (isFetched: boolean, reading: number): string => {
+    if (isFetched) {
+      return "lightgray";
+    } else {
+      let colormap = interpolate(["purple", "darkviolet", "orchid", "violet"]);
+      return colormap((reading-950)/100);
+    }
+  }
   

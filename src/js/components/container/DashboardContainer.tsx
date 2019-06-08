@@ -8,7 +8,7 @@ import { MeasuredValuesNames } from "../../types";
 import Dashboard from "../presentational/Dashboard";
 import { fetchSingleMeasuredValue } from "../../api/CommonSensor";
 import { fetchMultipleMeasuredValues } from "../../api/SensorMerger";
-import { temperature } from "../../constants/palettes";
+import { temperature, humidity, pressure } from "../../constants/palettes";
 
 type DispatchProps = {
   fetchMeasuredValue: (measuredValueName: MeasuredValuesNames) => void,
@@ -18,6 +18,8 @@ type DispatchProps = {
 type StateProps = {
   outdoor_temperature: MeasuredValueIndicator,
   indoor2_temperature: MeasuredValueIndicator,
+  indoor1_humidity: MeasuredValueIndicator,
+  indoor2_pressure: MeasuredValueIndicator,
 };
 
 type Props = StateProps & DispatchProps;
@@ -42,12 +44,28 @@ class DashboardContainerConnected extends React.Component<Props, State> {
           paletteColor={temperature}
           onClick={() => this.props.fetchMeasuredValue("indoor2_temperature")}
         />
+        <ValueDisplay
+          isFetched={this.props.indoor1_humidity.isFetched}
+          label="humidity"
+          reading={this.props.indoor1_humidity.value}
+          paletteColor={humidity}
+          precision={0}
+          unit="%"
+          onClick={() => this.props.fetchMeasuredValue("indoor1_humidity")}
+        />
+        <ValueDisplay
+          isFetched={this.props.indoor2_pressure.isFetched}
+          label="pressure"
+          reading={this.props.indoor2_pressure.value}
+          paletteColor={pressure}
+          onClick={() => this.props.fetchMeasuredValue("indoor2_pressure")}
+        />
       </Dashboard>
     );
   }
 
   public componentDidMount() {
-    this.props.fetchMultipleMeasuredValues(["outdoor_temperature", "indoor2_temperature"]);
+    this.props.fetchMultipleMeasuredValues(["outdoor_temperature", "indoor2_temperature", "indoor1_humidity", "indoor2_pressure"]);
   }
   
 }
@@ -56,6 +74,8 @@ const mapStateToProps = (state: AppState): StateProps => {
   return {
     outdoor_temperature: state.measuredValues.outdoor_temperature,
     indoor2_temperature: state.measuredValues.indoor2_temperature,
+    indoor1_humidity: state.measuredValues.indoor1_humidity,
+    indoor2_pressure: state.measuredValues.indoor2_pressure,
   };
 };
 

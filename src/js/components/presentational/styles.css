@@ -1,29 +1,51 @@
 .dashboard__container {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 
 .visualDisplay__container {
     display: flex; 
     flex-direction: column;
     cursor: pointer;
-    padding: 1em;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 0.5em;
+    font-size: 7em;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.visualDisplay__container p {
-    margin: 0.5em 0 0 0 ;
-    padding: 0;
-    text-align: center;
-    font-size: smaller;
+.visualDisplay__container svg{
+    font-size: 2rem;
+    transform-origin: 200px 200px;
+    position: absolute; 
+    margin-top: -40px; 
+    margin-left: -30px;
+}
+
+.visualDisplay__container svg.frozen{
+    transform: rotate(18deg);
+}
+
+.visualDisplay__container svg.animated{
+    animation-name: rotate;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes rotate {
+    from { transform: rotate(18deg); }
+    to { transform: rotate(360deg); }
 }
 
 .visualDisplay_circle {
-    width: 60px;
-    height: 60px;
+    width: 340px;
+    height: 340px;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     border-radius: 50%;
     transition: background-color 0.5s;
 }

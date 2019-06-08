@@ -19,7 +19,15 @@ const initialState = {
             value: 0,
             isFetched: false,
         },
+        indoor1_humidity: {
+            value: 0,
+            isFetched: false,
+        },
         indoor2_temperature: {
+            value: 0,
+            isFetched: false,
+        },
+        indoor2_pressure: {
             value: 0,
             isFetched: false,
         },

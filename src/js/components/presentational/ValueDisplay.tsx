@@ -1,4 +1,5 @@
 import React from "react";
+import WrappedText from "./WrappedText";
 
 type Props = {
   label: string;
@@ -12,11 +13,18 @@ type Props = {
 
 const ValueDisplay = (props: Props) => (
   <div className="visualDisplay__container" onClick={props.onClick}>
+    <WrappedText isFetched={props.isFetched}>
+      {props.label}
+    </WrappedText>
     <div className="visualDisplay_circle" style={{backgroundColor: props.paletteColor(props.isFetched, props.reading)}}>
-        {props.isFetched ? "..." : props.reading.toFixed(props.precision ? props.precision : 1)}
+        {props.isFetched ? "..." : formatValue(props)}
     </div>
-    <p>{props.label}</p>
   </div>
 );
+
+const formatValue = (props: Props): string => {
+  return props.reading.toFixed(props.precision !== undefined ? props.precision : 1)
+    + (props.unit ? props.unit : "") ;
+}
 
 export default ValueDisplay;

@@ -28,16 +28,16 @@ export function fetchMultipleMeasuredValues(measuredValueNames: MeasuredValuesNa
         console.log(JSON.stringify(readings));
         updateMeasuredValues(measuredValueNames, readings, dispatch);
       })
+      .then(() => {
+        measuredValueNames.forEach(measuredValueName =>
+          dispatch(setIsBeingFetched(isBeingFetchedPayload(measuredValueName, false))));
+        dispatch(setSensorMergerIsBeingFetched(false));
+      })
       .catch(error => {
         console.warn("Direct sensor request failed: " + error);
         console.warn("Trying to fetch latest DB values");
         fetchLatestValuesFromDb(measuredValueNames, dispatch);
         // console.error(error);
-      })
-      .finally(() => {
-        measuredValueNames.forEach(measuredValueName =>
-          dispatch(setIsBeingFetched(isBeingFetchedPayload(measuredValueName, false))));
-        dispatch(setSensorMergerIsBeingFetched(false));
       });
   }
 };
@@ -57,12 +57,17 @@ function getSensorReadingValue(readings: SensorMergerReadings, measuredValueName
   return value;
 }
 
-function fetchLatestValuesFromDb(measuredValueNames: MeasuredValuesNames[], dispatch: ThunkDispatch<AppState, undefined, Actions>) {
+export function fetchLatestValuesFromDb(measuredValueNames: MeasuredValuesNames[], dispatch: ThunkDispatch<AppState, undefined, Actions>) {
   fetch(DB_SERVICE)
     .then(response => response.json())
     .then((readings: SensorMergerReadings) => {
       console.log(JSON.stringify(readings))
       updateMeasuredValues(measuredValueNames, readings, dispatch);
     })
-    .catch(error => console.error(error));
+    .catch(error => console.error(error))
+    .finally(() => {
+      measuredValueNames.forEach(measuredValueName =>
+        dispatch(setIsBeingFetched(isBeingFetchedPayload(measuredValueName, false))));
+      dispatch(setSensorMergerIsBeingFetched(false));
+    })
 }

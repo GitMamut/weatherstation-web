@@ -6,6 +6,7 @@ import { AppState } from "../redux/rootReducer";
 import { MeasuredValuesNames, MeasuredValue, Sensor, CommonSensorReading, CommonSensorValue } from "../types";
 import { measuredValues } from "../../config/config";
 import { setIsBeingFetched, setMeasuredValue } from "../redux/actions";
+import { fetchLatestValuesFromDb } from "./SensorMerger";
 
 export function fetchSingleMeasuredValue(measuredValueName: MeasuredValuesNames):
     ThunkAction<void, AppState, undefined, Actions> {
@@ -27,10 +28,15 @@ export function fetchSingleMeasuredValue(measuredValueName: MeasuredValuesNames)
                 const value: number = getCommonSensorValue(commonSensorReading, measuredValue.id);
                 dispatch(setMeasuredValue(measuredValuePayload(measuredValueName, value)));
             })
-            .catch(error => console.error(error))
-            .finally(() => {
+            .then(() => {
                 dispatch(setIsBeingFetched(isBeingFetchedPayload(measuredValueName, false)));
-            });
+            })
+            .catch(error => {
+                console.warn("Direct sensor request failed: " + error);
+                console.warn("Trying to fetch latest DB values");
+                fetchLatestValuesFromDb([measuredValueName], dispatch);
+                // console.error(error);
+              });
     }
 };
 
