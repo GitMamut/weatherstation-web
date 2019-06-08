@@ -7,16 +7,20 @@ type Props = {
 
 class WrappedText extends React.PureComponent<Props> {
   render() {
+    const cx = 200;
+    const cy = 200;
+    const r = 180;
+
     return (
-      <svg width="360" height="360" className={this.props.isFetched ? "animated" : "frozen"} viewBox="-20 -20 360 360" >
-        {/* <circle cx="180" cy="180" r="180" fill="red"/> */}
+      <svg width="400" height="400" className={this.props.isFetched ? "animated" : "frozen"} viewBox="0 0 400 400" >
+        {/* <circle cx={cx} cy={cy} r={r} fill="red"/> */}
         <path 
           id="curve"
           fill="transparent"
-          d="
-            M 0, 180
-            a 180,180 0 1,1 360,0
-            a 180,180 0 1,1 -0,0"         
+          d={`
+            M ${cx -r}, ${cy}
+            a ${r},${r} 0 1,1 ${r*2},0
+            a ${r},${r} 0 1,1 -0,0`}
           />
           <desc>
             M (CX - R), CY
