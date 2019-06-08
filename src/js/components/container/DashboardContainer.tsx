@@ -34,6 +34,7 @@ class DashboardContainerConnected extends React.Component<Props, State> {
           isFetched={this.props.outdoor_temperature.isFetched}
           label="outdoor"
           reading={this.props.outdoor_temperature.value}
+          date={this.props.outdoor_temperature.date}
           paletteColor={temperature}
           onClick={() => this.props.fetchMeasuredValue("outdoor_temperature")}
         />
@@ -41,6 +42,7 @@ class DashboardContainerConnected extends React.Component<Props, State> {
           isFetched={this.props.indoor2_temperature.isFetched}
           label="indoor"
           reading={this.props.indoor2_temperature.value}
+          date={this.props.indoor2_temperature.date}
           paletteColor={temperature}
           onClick={() => this.props.fetchMeasuredValue("indoor2_temperature")}
         />
@@ -48,6 +50,7 @@ class DashboardContainerConnected extends React.Component<Props, State> {
           isFetched={this.props.indoor1_humidity.isFetched}
           label="humidity"
           reading={this.props.indoor1_humidity.value}
+          date={this.props.indoor1_humidity.date}
           paletteColor={humidity}
           precision={0}
           unit="%"
@@ -57,6 +60,7 @@ class DashboardContainerConnected extends React.Component<Props, State> {
           isFetched={this.props.indoor2_pressure.isFetched}
           label="pressure"
           reading={this.props.indoor2_pressure.value}
+          date={this.props.indoor2_pressure.date}
           paletteColor={pressure}
           onClick={() => this.props.fetchMeasuredValue("indoor2_pressure")}
         />

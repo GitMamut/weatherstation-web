@@ -1,4 +1,5 @@
 import { MeasuredValuesNames } from "../types";
+import { Moment } from "moment";
 
 export const SET_MEASURED_VALUE = "SET_MEASURED_VALUE";
 export const SET_IS_BEING_FETCHED = "SET_IS_BEING_FETCHED";
@@ -7,6 +8,7 @@ export const SET_SENSOR_MERGER_IS_BEING_FETCHED = "SET_SENSOR_MERGER_IS_BEING_FE
 export type MeasuredValuePayload = {
     value: number;
     measuredValueName: MeasuredValuesNames;
+    date: Moment;
 };
 
 export type IsBeingFetchedPayload = {

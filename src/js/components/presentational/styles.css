@@ -23,6 +23,11 @@
     margin-left: -30px;
 }
 
+.visualDisplay__container svg.date{
+    font-size: 1rem;
+    transform: rotate(252deg);
+}
+
 .visualDisplay__container svg.frozen{
     transform: rotate(18deg);
 }

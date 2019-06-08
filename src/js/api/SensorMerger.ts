@@ -7,6 +7,7 @@ import { MeasuredValuesNames, MeasuredValue, Sensor, CommonSensorReading, Common
 import { measuredValues, SENSOR_MERGER_URL, DB_SERVICE } from "../../config/config";
 import { setIsBeingFetched, setMeasuredValue, setSensorMergerIsBeingFetched } from "../redux/actions";
 import { isBeingFetchedPayload, measuredValuePayload } from "./CommonSensor";
+import moment, { Moment } from "moment";
 
 export function fetchMultipleMeasuredValues(measuredValueNames: MeasuredValuesNames[]):
   ThunkAction<void, AppState, undefined, Actions> {
@@ -23,10 +24,11 @@ export function fetchMultipleMeasuredValues(measuredValueNames: MeasuredValuesNa
 
     fetch(SENSOR_MERGER_URL)
       .then(response => response.json())
-      .then((sensorMergerResponse: SensorMergerType) => sensorMergerResponse.sensorReadings)
-      .then((readings: SensorMergerReadings) => {
+      .then((sensorMergerResponse: SensorMergerType) => {
+        const date = moment(sensorMergerResponse.date);
+        const readings: SensorMergerReadings = sensorMergerResponse.sensorReadings;
         console.log(JSON.stringify(readings));
-        updateMeasuredValues(measuredValueNames, readings, dispatch);
+        updateMeasuredValues(measuredValueNames, readings, dispatch, date);
       })
       .then(() => {
         measuredValueNames.forEach(measuredValueName =>
@@ -42,10 +44,13 @@ export function fetchMultipleMeasuredValues(measuredValueNames: MeasuredValuesNa
   }
 };
 
-function updateMeasuredValues(measuredValueNames: MeasuredValuesNames[], readings: SensorMergerReadings, dispatch: ThunkDispatch<AppState, undefined, Actions>) {
+function updateMeasuredValues(measuredValueNames: MeasuredValuesNames[],
+  readings: SensorMergerReadings,
+  dispatch: ThunkDispatch<AppState, undefined, Actions>,
+  date: Moment) {
   measuredValueNames.forEach(measuredValueName => {
     const value: number = getSensorReadingValue(readings, measuredValueName);
-    dispatch(setMeasuredValue(measuredValuePayload(measuredValueName, value)));
+    dispatch(setMeasuredValue(measuredValuePayload(measuredValueName, value, date)));
   });
 }
 
@@ -59,15 +64,34 @@ function getSensorReadingValue(readings: SensorMergerReadings, measuredValueName
 
 export function fetchLatestValuesFromDb(measuredValueNames: MeasuredValuesNames[], dispatch: ThunkDispatch<AppState, undefined, Actions>) {
   fetch(DB_SERVICE)
-    .then(response => response.json())
-    .then((readings: SensorMergerReadings) => {
-      console.log(JSON.stringify(readings))
-      updateMeasuredValues(measuredValueNames, readings, dispatch);
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      const date = getDate(response.headers);
+      response.json()
+        .then((readings: SensorMergerReadings) => {
+          if (date) {
+            updateMeasuredValues(measuredValueNames, readings, dispatch, date);
+          }
+        })
+        .catch(error => console.error(error))
+        .finally(() => {
+          measuredValueNames.forEach(measuredValueName =>
+            dispatch(setIsBeingFetched(isBeingFetchedPayload(measuredValueName, false))));
+          dispatch(setSensorMergerIsBeingFetched(false));
+        })
     })
-    .catch(error => console.error(error))
-    .finally(() => {
-      measuredValueNames.forEach(measuredValueName =>
-        dispatch(setIsBeingFetched(isBeingFetchedPayload(measuredValueName, false))));
-      dispatch(setSensorMergerIsBeingFetched(false));
-    })
+}
+
+function getDate(headers: Headers): Moment | undefined {
+  console.log(Array.from(headers.values()));
+  if (headers.has("X-Reading-Time")) {
+    const readingTime = headers.get("X-Reading-Time");
+    console.log("Reading time: " + readingTime);
+    if (readingTime) {
+      return moment(readingTime);
+    }
+  }
+  return moment();
 }
