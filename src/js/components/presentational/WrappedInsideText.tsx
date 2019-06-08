@@ -1,5 +1,5 @@
 import React from "react";
-import "./styles.css"
+import classnames from "classnames";
 
 type Props = {
   isFetched: boolean;
@@ -12,7 +12,7 @@ class WrappedInsideText extends React.PureComponent<Props> {
     const r = 150;
 
     return (
-      <svg width="400" height="400" className={"date"} viewBox="0 0 400 400" >
+      <svg width="400" height="400" className={classnames("date", this.props.isFetched ? "transparent": "opaque")} viewBox="0 0 400 400" >
         {/* <circle cx={cx} cy={cy} r={r} fill="red"/> */}
         <path 
           id="insideCurve"

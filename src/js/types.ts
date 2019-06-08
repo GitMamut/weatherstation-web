@@ -1,6 +1,9 @@
 export type MeasuredValuesNames = 
     "outdoor_temperature" |  "indoor2_temperature" | "indoor1_humidity" | "indoor2_pressure";
+
 export type SensorsNames = "outdoor" | "indoor1" | "indoor2";
+
+export enum Source {live, database, merger, unknown};
 
 export type Sensors = {
     [K in SensorsNames]: Sensor;

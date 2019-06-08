@@ -1,4 +1,4 @@
-import { MeasuredValuesNames } from "../types";
+import { MeasuredValuesNames, Source } from "../types";
 import { Moment } from "moment";
 
 export const SET_MEASURED_VALUE = "SET_MEASURED_VALUE";
@@ -9,6 +9,7 @@ export type MeasuredValuePayload = {
     value: number;
     measuredValueName: MeasuredValuesNames;
     date: Moment;
+    source: Source;
 };
 
 export type IsBeingFetchedPayload = {

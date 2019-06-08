@@ -3,7 +3,7 @@ import {
 } from "../constants/action-types";
 import { ThunkAction } from "redux-thunk";
 import { AppState } from "../redux/rootReducer";
-import { MeasuredValuesNames, MeasuredValue, Sensor, CommonSensorReading, CommonSensorValue } from "../types";
+import { MeasuredValuesNames, MeasuredValue, Sensor, CommonSensorReading, CommonSensorValue, Source } from "../types";
 import { measuredValues } from "../../config/config";
 import { setIsBeingFetched, setMeasuredValue } from "../redux/actions";
 import { fetchLatestValuesFromDb } from "./SensorMerger";
@@ -29,7 +29,7 @@ export function fetchSingleMeasuredValue(measuredValueName: MeasuredValuesNames)
                 console.log(JSON.stringify(commonSensorReading));
                 const value: number = getCommonSensorValue(commonSensorReading, measuredValue.id);
                 const date: Moment = getCommonSensorDate(commonSensorReading);
-                dispatch(setMeasuredValue(measuredValuePayload(measuredValueName, value, date)));
+                dispatch(setMeasuredValue(measuredValuePayload(measuredValueName, value, date, Source.live)));
             })
             .then(() => {
                 dispatch(setIsBeingFetched(isBeingFetchedPayload(measuredValueName, false)));
@@ -56,11 +56,12 @@ function getCommonSensorDate(json: CommonSensorReading) {
     return moment(json.date);
 }
 
-export function measuredValuePayload(measuredValueName: MeasuredValuesNames, value: number, date: Moment): MeasuredValuePayload {
+export function measuredValuePayload(measuredValueName: MeasuredValuesNames, value: number, date: Moment, source: Source): MeasuredValuePayload {
     return {
         measuredValueName,
         value,
         date,
+        source,
     };
 }
 

@@ -26,6 +26,7 @@
 .visualDisplay__container svg.date{
     font-size: 1rem;
     transform: rotate(252deg);
+    transition: 0.2s opacity;
 }
 
 .visualDisplay__container svg.frozen{
@@ -37,6 +38,14 @@
     animation-duration: 5s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
+}
+
+.visualDisplay__container svg.transparent{
+    opacity: 0;
+}
+
+.visualDisplay__container svg.opaque{
+    opacity: 1;
 }
 
 @keyframes rotate {

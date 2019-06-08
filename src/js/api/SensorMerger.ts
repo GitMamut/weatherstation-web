@@ -3,7 +3,7 @@ import {
 } from "../constants/action-types";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { AppState } from "../redux/rootReducer";
-import { MeasuredValuesNames, MeasuredValue, Sensor, CommonSensorReading, CommonSensorValue, SensorMergerType, SensorMergerReadings, DbResponseType } from "../types";
+import { MeasuredValuesNames, MeasuredValue, Sensor, CommonSensorReading, CommonSensorValue, SensorMergerType, SensorMergerReadings, DbResponseType, Source } from "../types";
 import { measuredValues, SENSOR_MERGER_URL, DB_SERVICE } from "../../config/config";
 import { setIsBeingFetched, setMeasuredValue, setSensorMergerIsBeingFetched } from "../redux/actions";
 import { isBeingFetchedPayload, measuredValuePayload } from "./CommonSensor";
@@ -28,7 +28,7 @@ export function fetchMultipleMeasuredValues(measuredValueNames: MeasuredValuesNa
         const date = moment(sensorMergerResponse.date);
         const readings: SensorMergerReadings = sensorMergerResponse.sensorReadings;
         console.log(JSON.stringify(readings));
-        updateMeasuredValues(measuredValueNames, readings, dispatch, date);
+        updateMeasuredValues(measuredValueNames, readings, dispatch, date, Source.merger);
       })
       .then(() => {
         measuredValueNames.forEach(measuredValueName =>
@@ -47,10 +47,11 @@ export function fetchMultipleMeasuredValues(measuredValueNames: MeasuredValuesNa
 function updateMeasuredValues(measuredValueNames: MeasuredValuesNames[],
   readings: SensorMergerReadings,
   dispatch: ThunkDispatch<AppState, undefined, Actions>,
-  date: Moment) {
+  date: Moment,
+  source: Source) {
   measuredValueNames.forEach(measuredValueName => {
     const value: number = getSensorReadingValue(readings, measuredValueName);
-    dispatch(setMeasuredValue(measuredValuePayload(measuredValueName, value, date)));
+    dispatch(setMeasuredValue(measuredValuePayload(measuredValueName, value, date, source)));
   });
 }
 
@@ -69,7 +70,7 @@ export function fetchLatestValuesFromDb(measuredValueNames: MeasuredValuesNames[
       const date = moment(parseInt(sensorMergerResponse.date));
       const readings: SensorMergerReadings = sensorMergerResponse.values;
       console.log(JSON.stringify(readings));
-      updateMeasuredValues(measuredValueNames, readings, dispatch, date);
+      updateMeasuredValues(measuredValueNames, readings, dispatch, date, Source.database);
     })
     .catch(error => console.error(error))
     .finally(() => {

@@ -1,11 +1,12 @@
 import { Actions, SET_MEASURED_VALUE, SET_IS_BEING_FETCHED, SET_SENSOR_MERGER_IS_BEING_FETCHED } from "../constants/action-types";
-import { MeasuredValuesNames } from "../types";
+import { MeasuredValuesNames, Source } from "../types";
 import { Moment } from "moment";
 
 export type MeasuredValueIndicator = {
     value: number;
     isFetched: boolean;
     date?: Moment;
+    source: Source;
 }
 
 export type AppState = {
@@ -21,21 +22,26 @@ const initialState = {
             value: 0,
             isFetched: false,
             date: undefined,
+            source: Source.unknown,
         },
         indoor1_humidity: {
             value: 0,
             isFetched: false,
             date: undefined,
+            source: Source.unknown,
         },
         indoor2_temperature: {
             value: 0,
             isFetched: false,
             date: undefined,
+            source: Source.unknown,
+
         },
         indoor2_pressure: {
             value: 0,
             isFetched: false,
             date: undefined,
+            source: Source.unknown,
         },
     },
     sensorMergerIsFetched: false,
@@ -52,6 +58,7 @@ function rootReducer(state: AppState = initialState, action: Actions) {
                         ...state.measuredValues[action.payload.measuredValueName],
                         value: action.payload.value,
                         date: action.payload.date,
+                        source: action.payload.source,
                     },
                 }
             };
