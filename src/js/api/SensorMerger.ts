@@ -3,7 +3,7 @@ import {
 } from "../constants/action-types";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { AppState } from "../redux/rootReducer";
-import { MeasuredValuesNames, MeasuredValue, Sensor, CommonSensorReading, CommonSensorValue, SensorMergerType, SensorMergerReadings } from "../types";
+import { MeasuredValuesNames, MeasuredValue, Sensor, CommonSensorReading, CommonSensorValue, SensorMergerType, SensorMergerReadings, DbResponseType } from "../types";
 import { measuredValues, SENSOR_MERGER_URL, DB_SERVICE } from "../../config/config";
 import { setIsBeingFetched, setMeasuredValue, setSensorMergerIsBeingFetched } from "../redux/actions";
 import { isBeingFetchedPayload, measuredValuePayload } from "./CommonSensor";
@@ -64,34 +64,18 @@ function getSensorReadingValue(readings: SensorMergerReadings, measuredValueName
 
 export function fetchLatestValuesFromDb(measuredValueNames: MeasuredValuesNames[], dispatch: ThunkDispatch<AppState, undefined, Actions>) {
   fetch(DB_SERVICE)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      const date = getDate(response.headers);
-      response.json()
-        .then((readings: SensorMergerReadings) => {
-          if (date) {
-            updateMeasuredValues(measuredValueNames, readings, dispatch, date);
-          }
-        })
-        .catch(error => console.error(error))
-        .finally(() => {
-          measuredValueNames.forEach(measuredValueName =>
-            dispatch(setIsBeingFetched(isBeingFetchedPayload(measuredValueName, false))));
-          dispatch(setSensorMergerIsBeingFetched(false));
-        })
+    .then(response => response.json())
+    .then((sensorMergerResponse: DbResponseType) => {
+      const date = moment(parseInt(sensorMergerResponse.date));
+      const readings: SensorMergerReadings = sensorMergerResponse.values;
+      console.log(JSON.stringify(readings));
+      updateMeasuredValues(measuredValueNames, readings, dispatch, date);
     })
-}
+    .catch(error => console.error(error))
+    .finally(() => {
+      measuredValueNames.forEach(measuredValueName =>
+        dispatch(setIsBeingFetched(isBeingFetchedPayload(measuredValueName, false))));
+      dispatch(setSensorMergerIsBeingFetched(false));
+    })
 
-function getDate(headers: Headers): Moment | undefined {
-  console.log(Array.from(headers.values()));
-  if (headers.has("X-Reading-Time")) {
-    const readingTime = headers.get("X-Reading-Time");
-    console.log("Reading time: " + readingTime);
-    if (readingTime) {
-      return moment(readingTime);
-    }
-  }
-  return moment();
 }

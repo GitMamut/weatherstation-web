@@ -20,7 +20,7 @@ const ValueDisplay = (props: Props) => (
       {props.label}
     </WrappedText>
     <WrappedInsideText isFetched={props.isFetched}>
-      {props.date ?  props.date.format("DD/MM HH:mm"): ""}
+      {props.date ?  props.date.format("ddd, DD MMM HH:mm"): ""}
     </WrappedInsideText>
     <div className="visualDisplay_circle" style={{ backgroundColor: props.paletteColor(props.isFetched, props.reading) }}>
       {props.isFetched ? "..." : formatValue(props)}

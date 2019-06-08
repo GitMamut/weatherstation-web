@@ -1,6 +1,6 @@
 import { MeasuredValues, Sensors } from "../js/types";
 
-export const SENSOR_MERGER_URL = "http://raspberrypi1:7001/";
+export const SENSOR_MERGER_URL = "http://raspberrypi:7001/";
 export const DB_SERVICE = "https://mintfrost-db.herokuapp.com/";
 
 export const sensors: Sensors = {

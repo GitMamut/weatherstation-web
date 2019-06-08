@@ -34,6 +34,11 @@ export type CommonSensorValue = {
     value: string;
 };
 
+export type DbResponseType = {
+    date: string;
+    values: SensorMergerReadings,
+};
+
 export type SensorMergerType = {
     date: number;
     sensorReadings: SensorMergerReadings,
