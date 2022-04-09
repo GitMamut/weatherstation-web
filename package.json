@@ -34,7 +34,7 @@
     "classnames": "^2.2.6",
     "color-interpolate": "^1.0.4",
     "dateformat": "^3.0.3",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "redux-thunk": "^2.3.0"
